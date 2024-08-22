@@ -19,19 +19,20 @@ systemctl start httpd
 journalctl | grep httpd
 
 
-#Convert .der, .cer, .crt files to .pem
+# Convert .der, .cer, .crt files to .pem
 openssl x509 -inform der -in certificate.cer -out certificate.pem
 
-#Convert .pem file to .der
+# Convert .pem file to .der
 openssl x509 -outform der -in certificate.pem -out certificate.der
 
-#Convert .pfx, .p12 containing a private key and certificates to .pem
+# Convert .pfx, .p12 containing a private key and certificates to .pem
 openssl pkcs12 -in keyStore.pfx -out keyStore.pem -nodes
 
-#Convert .pem certificate file and a private key to .pfx, .p12
-openssl pkcs12 -export -out certificate.pfx -inkey privateKey.key -in certificate.crt -certfile CACert.crt
+# Convert .pem certificate file and a private key to .pfx, .p12
+openssl pkcs12 -export -out certificate.pfx -inkey privateKey.key -in certificate.crt -certfile CACert.crt 
 
-#Convert .pe. to .crt file
+# Convert .pe. to .crt file
 openssl x509 -outform der -in certificate.pem -out certificate.crt
 
-
+# List SSL/TLS certificates connecting to server
+openssl s_client -showcerts -connect google.com:443
