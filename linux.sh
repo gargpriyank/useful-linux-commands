@@ -41,3 +41,9 @@ openssl x509 -outform der -in certificate.pem -out certificate.crt
 
 # List SSL/TLS certificates connecting to server
 openssl s_client -showcerts -connect google.com:443
+
+# Test validity of SSL/TLS certificates
+openssl s_client -verify_return_error -connect google:443
+
+# Associate the SSL/TLS certificate with certificate file
+openssl s_client -CAfile server.crt -connect localhost:443
