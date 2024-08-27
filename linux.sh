@@ -22,7 +22,10 @@ journalctl | grep httpd
 openssl req -x509 -sha256 -days 365 -newkey rsa:2048 -keyout server.key -out server.crt
 
 # Generate self-signed certificate without paasphrase
-openssl req -x509 -sha256 -days 365 -newkey rsa:2048 -keyout server.key -out server.crt -nodes
+openssl req -x509 -nodes -sha256 -days 365 -newkey rsa:2048 -keyout server.key -out server.crt
+
+# Generate self-signed certificate without paasphrase in Apache server
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/server.key -out /etc/ssl/certs/server.crt
 
 # Convert .der, .cer, .crt files to .pem
 openssl x509 -inform der -in certificate.cer -out certificate.pem
