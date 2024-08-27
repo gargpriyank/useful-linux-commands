@@ -18,6 +18,8 @@ systemctl start httpd
 # Collect the logs from different sources to grep httpd
 journalctl | grep httpd
 
+# Generate self-signed certificate
+openssl req -x509 -sha256 -days 365 -newkey rsa:2048 -keyout server.key -out server.crt
 
 # Convert .der, .cer, .crt files to .pem
 openssl x509 -inform der -in certificate.cer -out certificate.pem
