@@ -19,13 +19,29 @@ systemctl start httpd
 journalctl | grep httpd
 
 # Generate self-signed certificate with paasphrase
-openssl req -x509 -sha256 -days 365 -newkey rsa:2048 -keyout server.key -out server.crt
+openssl req -x509 -sha256 -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/server.key -out /etc/ssl/certs/server.crt
 
 # Generate self-signed certificate without paasphrase
-openssl req -x509 -nodes -sha256 -days 365 -newkey rsa:2048 -keyout server.key -out server.crt
+openssl req -x509 -nodes -sha256 -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/server.key -out /etc/ssl/certs/server.crt
 
 # Generate self-signed certificate without paasphrase in Apache server
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/server.key -out /etc/ssl/certs/server.crt
+
+# List SSL/TLS certificates connecting to server
+openssl s_client -showcerts -connect localhost:443
+
+# Test validity of SSL/TLS certificate
+openssl s_client -verify_return_error -connect localhost:443
+
+# Associate the SSL/TLS certificate with certificate file
+openssl s_client -CAfile /etc/ssl/certs/server.crt -connect localhost:443
+
+# Install SSL/TLS certificate
+cp server.crt /etc/pki/ca-trust/source/anchors/
+update-ca-trust
+
+# Display the installed certificate
+openssl x509 -noout -text -in /etc/ssl/certs/server.crt
 
 # Convert .der, .cer, .crt files to .pem
 openssl x509 -inform der -in certificate.cer -out certificate.pem
@@ -41,16 +57,3 @@ openssl pkcs12 -export -out certificate.pfx -inkey privateKey.key -in certificat
 
 # Convert .pe. to .crt file
 openssl x509 -outform der -in certificate.pem -out certificate.crt
-
-# List SSL/TLS certificates connecting to server
-openssl s_client -showcerts -connect google.com:443
-
-# Test validity of SSL/TLS certificate
-openssl s_client -verify_return_error -connect google:443
-
-# Associate the SSL/TLS certificate with certificate file
-openssl s_client -CAfile server.crt -connect localhost:443
-
-# Install SSL/TLS certificate
-cp server.crt /etc/pki/ca-trust/source/anchors/
-update-ca-trust
