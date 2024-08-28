@@ -43,6 +43,9 @@ openssl x509 -noout -text -in /etc/ssl/certs/server.crt
 cp /etc/ssl/certs/server.crt /etc/pki/ca-trust/source/anchors/
 update-ca-trust
 
+# Search the .conf file for SSL/TLS certificate
+grep -i -r "SSLCertificateChainFile" /etc/ssl/
+
 # Convert .der, .cer, .crt files to .pem
 openssl x509 -inform der -in certificate.cer -out certificate.pem
 
