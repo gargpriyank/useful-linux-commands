@@ -36,12 +36,12 @@ openssl s_client -verify_return_error -connect localhost:443
 # Associate the SSL/TLS certificate with certificate file
 openssl s_client -CAfile /etc/ssl/certs/server.crt -connect localhost:443
 
-# Install SSL/TLS certificate
-cp server.crt /etc/pki/ca-trust/source/anchors/
-update-ca-trust
-
 # Display the installed certificate
 openssl x509 -noout -text -in /etc/ssl/certs/server.crt
+
+# Install SSL/TLS certificate
+cp /etc/ssl/certs/server.crt /etc/pki/ca-trust/source/anchors/
+update-ca-trust
 
 # Convert .der, .cer, .crt files to .pem
 openssl x509 -inform der -in certificate.cer -out certificate.pem
